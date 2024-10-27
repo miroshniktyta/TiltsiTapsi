@@ -50,9 +50,9 @@ class SettingsComponentNode: SKNode {
         }
         setupSwitchRow(in: container, title: "Sound", switchNode: soundSwitch, yPosition: soundSwitchY, labelHeight: rowHeight * 0.3)
         
-        let notificationIsOn = SettingsManager.shared.isNotificationEnabled
-        notificationSwitch = CustomSwitchNode(height: rowHeight * 0.6, isOn: notificationIsOn) { isOn in
-            SettingsManager.shared.isNotificationEnabled = isOn
+//        let notificationIsOn = SettingsManager.shared.isNotificationEnabled
+        notificationSwitch = CustomSwitchNode(height: rowHeight * 0.6, isOn: true) { isOn in
+//            SettingsManager.shared.isNotificationEnabled = isOn
         }
         setupSwitchRow(in: container, title: "Notification", switchNode: notificationSwitch, yPosition: notificationSwitchY, labelHeight: rowHeight * 0.3)
         
@@ -67,7 +67,7 @@ class SettingsComponentNode: SKNode {
         let label = AppLabelNode(text: title)
         label.fontSize = labelHeight
         label.fontColor = .white
-        label.position = CGPoint(x: -size.width / 4, y: yPosition)
+        label.position = CGPoint(x: 0, y: yPosition + labelHeight * 1.7)
         container.addChild(label)
         
         let offLabel = AppLabelNode(text: "Off")

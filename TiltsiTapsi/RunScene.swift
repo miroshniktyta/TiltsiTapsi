@@ -6,7 +6,7 @@ class RunScene: SKScene, SKPhysicsContactDelegate {
     var colorsNumber = 4
     var totalBalls: Int = 100
     var aimBalls: Int = 25
-    var aimBallColor = UIColor.red
+    var aimBallColor = UIColor.orange
     var collectedBalls = 0
     var mistakes = 0
     var startTime: TimeInterval = 0
@@ -25,12 +25,12 @@ class RunScene: SKScene, SKPhysicsContactDelegate {
     // Labels
     var collectedLabel = AppLabelNode(text: "0")
     var tapToStartLabel = AppLabelNode(text: "Tap to Start")
+    var infoLabel: AppLabelNode!
     
     // Square in the game
     lazy var squareC: Ball = {
         let ballDiameter = calculateBallSize(numberOfBalls: totalBalls)
-        let color = colors[SettingsManager.shared.selectedBallColor]
-        return Ball(color: color, width: ballDiameter, shapeType: .square)
+        return Ball(color: aimBallColor, width: ballDiameter, shapeType: .square)
     }()
 
     // Define physics categories
@@ -49,9 +49,16 @@ class RunScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupTapToStartLabel() {
-        tapToStartLabel.fontSize = 32
+        infoLabel = AppLabelNode(text: "Tilt your phone to move around\nCollect all the ORANGE items to win")
+        infoLabel.numberOfLines = 0
+        infoLabel.fontSize = 18
+        infoLabel.fontColor = .white
+        infoLabel.position = CGPoint(x: frame.midX, y: frame.midY + 30)
+        addChild(infoLabel)
+        
+        tapToStartLabel.fontSize = 18
         tapToStartLabel.verticalAlignmentMode = .top
-        tapToStartLabel.position = CGPoint(x: frame.midX, y: frame.midY - 8)
+        tapToStartLabel.position = CGPoint(x: frame.midX, y: frame.midY - 40)
         addChild(tapToStartLabel)
         tapToStartLabel.run(.repeatForever(.sequence([.scale(by: 1.2, duration: 0.8), .scale(to: 1, duration: 0.7)])))
     }
@@ -155,6 +162,8 @@ class RunScene: SKScene, SKPhysicsContactDelegate {
 
         addChild(ball)
         balls.append(ball)
+        
+        ActionManager.shared.performAction(.ballAppear)
     }
     
     func colorBalls() {
@@ -230,6 +239,7 @@ class RunScene: SKScene, SKPhysicsContactDelegate {
             }
             collectedBalls += 1
             collectedLabel.text = "\(aimedBallsLeft)"
+            ActionManager.shared.performAction(.itemCollected)
         }
 
         if balls.filter({ $0.color == aimBallColor }).isEmpty {
@@ -253,11 +263,13 @@ class RunScene: SKScene, SKPhysicsContactDelegate {
 
         if let backButtonNode = nodesArray.first(where: { $0.name == "backButton" }) {
             transitionBackToMenu()
+            ActionManager.shared.performAction(.buttonTap)
             return
         }
         
         if tapToStartLabel.parent != nil {
             tapToStartLabel.removeFromParent()
+            infoLabel.removeFromParent() // Remove info label as well
             startGame()
             return
         }

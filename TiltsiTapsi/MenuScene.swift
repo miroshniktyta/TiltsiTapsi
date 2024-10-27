@@ -84,24 +84,28 @@ class MenuScene: BaseMenuScene {
         super.didMove(to: view)
         
         let gravityButton = CustomButtonNode(color: colors[0], text: "Hexa Fall", width: buttonWidth) {
+//            ActionManager.shared.performAction(.error)
             let sc = MenuGamesCategoryScene(size: self.size)
             sc.selectedGameType = .gravity
             self.view?.presentScene(sc)
         }
 
         let hopButton = CustomButtonNode(color: colors[1], text: "Penta Jump", width: buttonWidth) {
+//            ActionManager.shared.performAction(.buttonTap)
             let sc = MenuGamesCategoryScene(size: self.size)
             sc.selectedGameType = .jump
             self.view?.presentScene(sc)
         }
         
         let tilt1Button = CustomButtonNode(color: colors[2], text: "Tri Spot", width: buttonWidth) {
+//            ActionManager.shared.performAction(.itemCollected)
             let sc = MenuGamesCategoryScene(size: self.size)
             sc.selectedGameType = .spot
             self.view?.presentScene(sc)
         }
 
         let tilt2Button = CustomButtonNode(color: colors[3], text: "Quatra Run", width: buttonWidth) {
+//            ActionManager.shared.performAction(.ballAppear)
             let sc = MenuGamesCategoryScene(size: self.size)
             sc.selectedGameType = .run
             self.view?.presentScene(sc)
@@ -110,18 +114,18 @@ class MenuScene: BaseMenuScene {
         let settingsButton = CustomButtonNode(color: .gray, text: "Settings", width: buttonWidth / 1.4) {
             self.view?.presentScene(MenuSettingsScene(size: self.size))
         }
-        let rulesButton = CustomButtonNode(color: .gray, text: "Rules", width: buttonWidth / 1.4) {
-            let stats = StatsData(overage: 0.5, mistakes: 1, fastest: 0.5, time: 0.5)
-            let sc = GameOverScene(size: self.size, gameType: .gravity, statsData: stats)
-            self.view?.presentScene(sc)
-        }
+//        let rulesButton = CustomButtonNode(color: .gray, text: "Rules", width: buttonWidth / 1.4) {
+//            let stats = StatsData(overage: 0.5, mistakes: 1, fastest: 0.5, time: 0.5)
+//            let sc = GameOverScene(size: self.size, gameType: .gravity, statsData: stats)
+//            self.view?.presentScene(sc)
+//        }
         let gameCenter = CustomButtonNode(color: .gray, text: "Game Center", width: buttonWidth / 1.4) {
             if let vc = self.viewController() {
                 GameCenterManager.shared.showGameCenter(from: vc)
             }
         }
         
-        let buttons = [gravityButton, hopButton, tilt1Button, tilt2Button, settingsButton, rulesButton, gameCenter]
+        let buttons = [gravityButton, hopButton, tilt1Button, tilt2Button, settingsButton, gameCenter]
         buildUI(items: buttons)
     }
 }

@@ -27,6 +27,7 @@ class GravityScene: SKScene {
     // Labels
     var collectedLabel = AppLabelNode(text: "0")
     var tapToStartLabel = AppLabelNode(text: "Tap to Start")
+    var infoLabel: AppLabelNode!
     
     var gravityAngle: CGFloat = 0.0
     
@@ -47,7 +48,7 @@ class GravityScene: SKScene {
         navBar.zPosition = 100
         addChild(navBar)
         
-        let ball = Ball(color: aimBallColor, width: 32)
+        let ball = Ball(color: aimBallColor, width: 32, shapeType: .hexagon)
         ball.position = CGPoint(x: frame.maxX - 36, y: frame.height - navBarHeight / 2)
         navBar.addChild(ball)
         
@@ -71,9 +72,15 @@ class GravityScene: SKScene {
     }
     
     func setupTapToStartLabel() {
-        tapToStartLabel.fontSize = 32
+        infoLabel = AppLabelNode(text: "Tap all RED items as soon as possible.")
+        infoLabel.fontSize = 18
+        infoLabel.fontColor = .white
+        infoLabel.position = CGPoint(x: frame.midX, y: frame.midY + 30)
+        addChild(infoLabel)
+        
+        tapToStartLabel.fontSize = 18
         tapToStartLabel.verticalAlignmentMode = .top
-        tapToStartLabel.position = CGPoint(x: frame.midX, y: frame.midY - 8)
+        tapToStartLabel.position = CGPoint(x: frame.midX, y: frame.midY - 40)
         addChild(tapToStartLabel)
         tapToStartLabel.run(.repeatForever(.sequence([.scale(by: 1.2, duration: 0.8), .scale(to: 1, duration: 0.7)])))
     }
@@ -113,7 +120,7 @@ class GravityScene: SKScene {
         addChild(ball)
         balls.append(ball)
         
-        ActionManager.shared.performAction(.ball)
+        ActionManager.shared.performAction(.ballAppear)
     }
     
     func colorBalls() {
@@ -185,13 +192,14 @@ class GravityScene: SKScene {
         let nodesArray = nodes(at: location)
         
         if let backButtonNode = nodesArray.first(where: { $0.name == "backButton" }) {
-            ActionManager.shared.performAction(.backButtonTap)
+            ActionManager.shared.performAction(.buttonTap)
             transitionBackToMenu()
             return
         }
 
         if tapToStartLabel.parent != nil {
             tapToStartLabel.removeFromParent()
+            infoLabel.removeFromParent()
             startGame()
             return
         }
@@ -207,12 +215,12 @@ class GravityScene: SKScene {
                 
                 let reactionTime = CACurrentMediaTime() - lastTap
                 recordedReactionTimes.append(reactionTime)
-                ActionManager.shared.performAction(.itemTap)
+                ActionManager.shared.performAction(.itemCollected)
             } else {
                 backgroundColor = .red
                 run(.wait(forDuration: 0.25)) { self.backgroundColor = .black }
                 mistakes += 1
-                ActionManager.shared.performAction(.lose)
+                ActionManager.shared.performAction(.error)
             }
             lastTap = CACurrentMediaTime()
             if balls.filter({ $0.color == aimBallColor }).isEmpty {

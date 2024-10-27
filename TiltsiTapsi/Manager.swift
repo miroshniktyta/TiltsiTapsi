@@ -76,33 +76,13 @@ class SoundManager {
     var isSoundEnabled: Bool = true
     
     enum SoundType: String, CaseIterable {
-        case basso
-        case hero
-        case morse
-        case ping
-        case purr
-        case pop
-        case sosumi
-        case tink
         case systemTic
         case systemTap
         case systemTac
+        case beep
+        case whistle
         
-        var fileName: String? {
-            switch self {
-            case .basso: return "Basso.aiff"
-            case .hero: return "Hero.aiff"
-            case .morse: return "Morse.aiff"
-            case .ping: return "Ping.aiff"
-            case .purr: return "Purr.aiff"
-            case .pop: return "Pop.aiff"
-            case .sosumi: return "Sosumi.aiff"
-            case .tink: return "Tink.aiff"
-            case .systemTic, .systemTap, .systemTac: return nil
-            }
-        }
-        
-        var systemSoundID: SystemSoundID? {
+        var systemSoundID: SystemSoundID {
             switch self {
             case .systemTic:
                 return 1103
@@ -110,55 +90,26 @@ class SoundManager {
                 return 1104
             case .systemTac:
                 return 1105
-            default:
-                return nil
+            case .beep:
+                return 1111
+            case .whistle:
+                return 1016
             }
+        }
+        
+        func playSystemSound() {
+            AudioServicesPlaySystemSound(self.systemSoundID)
         }
     }
     
     func play(sound: SoundType) {
         guard isSoundEnabled else { return }
 
-        if let fileName = sound.fileName {
-            playSoundFromFile(fileName: fileName)
-        } else if let systemSoundID = sound.systemSoundID {
-            playSystemSound(systemSoundID: systemSoundID)
-        }
-    }
-    
-    private func playSoundFromFile(fileName: String) {
-        guard let url = Bundle.main.url(forResource: fileName, withExtension: nil) else {
-            print("Could not find sound file: \(fileName)")
-            return
-        }
-        
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.play()
-        } catch {
-            print("Error playing sound: \(error.localizedDescription)")
-        }
+        sound.playSystemSound()
     }
     
     private func playSystemSound(systemSoundID: SystemSoundID) {
         AudioServicesPlaySystemSound(systemSoundID)
-    }
-}
-
-class SoundAndVibrationMenuScene: BaseMenuScene {
-
-    override func didMove(to view: SKView) {
-        super.didMove(to: view)
-        
-        let buttonWidth = self.buttonWidth / 4
-    
-        let ar = ActionManager.ActionType.allCases.map { actino in
-            return  CustomButtonNode(color: .gray, text: "\(actino.rawValue)", width: buttonWidth) {
-                ActionManager.shared.performAction(actino)
-            }
-        }
-        
-        buildUI(items: ar)
     }
 }
 
@@ -185,7 +136,8 @@ class VibrationManager {
         case .heavy:
             AudioServicesPlaySystemSound(1521) // Heavy vibration
         case .error:
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate) // Standard vibration
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.error)
         }
     }
 }
@@ -196,13 +148,10 @@ class ActionManager {
     
     enum ActionType: String, CaseIterable {
         case buttonTap
-        case itemTap
-        case win
-        case lose
-        case backButtonTap
-        case menuAppear
-        case ball
-        case ball2
+        case itemCollected
+        case error
+        case ballAppear
+        case jump
     }
     
     func performAction(_ action: ActionType) {
@@ -210,57 +159,20 @@ class ActionManager {
         case .buttonTap:
             SoundManager.shared.play(sound: .systemTac)
             VibrationManager.shared.vibrate(type: .light)
-        case .itemTap:
+        case .itemCollected:
             SoundManager.shared.play(sound: .systemTic)
             VibrationManager.shared.vibrate(type: .medium)
-        case .win:
-            SoundManager.shared.play(sound: .hero)
-//            VibrationManager.shared.vibrate(type: .heavy)
-        case .lose:
-            SoundManager.shared.play(sound: .basso)
+        case .error:
+            SoundManager.shared.play(sound: .beep)
             VibrationManager.shared.vibrate(type: .error)
-        case .backButtonTap:
-            SoundManager.shared.play(sound: .systemTac)
-            VibrationManager.shared.vibrate(type: .light)
-        case .menuAppear:
-            SoundManager.shared.play(sound: .hero)
-            VibrationManager.shared.vibrate(type: .light)
-        case .ball:
+        case .ballAppear:
             SoundManager.shared.play(sound: .systemTap)
             VibrationManager.shared.vibrate(type: .light)
-        case .ball2:
-            SoundManager.shared.play(sound: .purr)
-            VibrationManager.shared.vibrate(type: .light)
+        case .jump:
+            SoundManager.shared.play(sound: .whistle)
+//            VibrationManager.shared.vibrate(type: .light)
         }
     }
-}
-
-class SettingsManager {
-    static let shared = SettingsManager()
-    
-    private let userDefaults = UserDefaults.standard
-    private let notificationKey = "isNotificationEnabled"
-    private let ballColorKey = "selectedBallColor"
-    
-    var isNotificationEnabled: Bool {
-        get {
-            return userDefaults.bool(forKey: notificationKey)
-        }
-        set {
-            userDefaults.set(newValue, forKey: notificationKey)
-        }
-    }
-    
-    var selectedBallColor: Int {
-        get {
-            return userDefaults.integer(forKey: ballColorKey)
-        }
-        set {
-            userDefaults.set(newValue, forKey: ballColorKey)
-        }
-    }
-    
-    private init() {}
 }
 
 class RecordsManager {

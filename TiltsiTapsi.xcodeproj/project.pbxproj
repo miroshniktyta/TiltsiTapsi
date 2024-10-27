@@ -20,7 +20,6 @@
 		4FFDC4672CCAB3D0007AB026 /* RunScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFDC4592CCAB3D0007AB026 /* RunScene.swift */; };
 		4FFDC4682CCAB3D0007AB026 /* StatsDisplayNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFDC45A2CCAB3D0007AB026 /* StatsDisplayNode.swift */; };
 		4FFDC4692CCAB3D0007AB026 /* CustomGameSettingNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFDC45B2CCAB3D0007AB026 /* CustomGameSettingNode.swift */; };
-		4FFDC46A2CCAB3D0007AB026 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFDC45C2CCAB3D0007AB026 /* GameViewController.swift */; };
 		4FFDC46C2CCAB3D0007AB026 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFDC45E2CCAB3D0007AB026 /* Manager.swift */; };
 		4FFDC46E2CCAB3E7007AB026 /* Explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4FFDC46D2CCAB3E6007AB026 /* Explosion.sks */; };
 		4FFDC4702CCAB660007AB026 /* Baloo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FFDC46F2CCAB660007AB026 /* Baloo-Regular.ttf */; };
@@ -45,7 +44,6 @@
 		4FFDC4592CCAB3D0007AB026 /* RunScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunScene.swift; sourceTree = "<group>"; };
 		4FFDC45A2CCAB3D0007AB026 /* StatsDisplayNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsDisplayNode.swift; sourceTree = "<group>"; };
 		4FFDC45B2CCAB3D0007AB026 /* CustomGameSettingNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomGameSettingNode.swift; sourceTree = "<group>"; };
-		4FFDC45C2CCAB3D0007AB026 /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameViewController.swift; path = "../../../Documents/GitHub/pInk-superBall/game/GameViewController.swift"; sourceTree = "<group>"; };
 		4FFDC45E2CCAB3D0007AB026 /* Manager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
 		4FFDC46D2CCAB3E6007AB026 /* Explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Explosion.sks; sourceTree = "<group>"; };
 		4FFDC46F2CCAB660007AB026 /* Baloo-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Baloo-Regular.ttf"; sourceTree = "<group>"; };
@@ -95,7 +93,6 @@
 				4FFDC4582CCAB3D0007AB026 /* SpotScene.swift */,
 				4FFDC4592CCAB3D0007AB026 /* RunScene.swift */,
 				4FFDC46D2CCAB3E6007AB026 /* Explosion.sks */,
-				4FFDC45C2CCAB3D0007AB026 /* GameViewController.swift */,
 				4FFDC45E2CCAB3D0007AB026 /* Manager.swift */,
 				4FFDC4752CCB9EA0007AB026 /* MyParticle.sks */,
 				4FFDC4542CCAB3CF007AB026 /* MenuScene.swift */,
@@ -191,7 +188,6 @@
 				4FFDC4782CCCF451007AB026 /* Ball.swift in Sources */,
 				4FFDC4742CCABF2C007AB026 /* CustomButtonNode.swift in Sources */,
 				4FFDC47E2CCE0FAC007AB026 /* GameOverScene.swift in Sources */,
-				4FFDC46A2CCAB3D0007AB026 /* GameViewController.swift in Sources */,
 				4FFDC4692CCAB3D0007AB026 /* CustomGameSettingNode.swift in Sources */,
 				4FFDC46C2CCAB3D0007AB026 /* Manager.swift in Sources */,
 				4FFDC4642CCAB3D0007AB026 /* GravityScene.swift in Sources */,

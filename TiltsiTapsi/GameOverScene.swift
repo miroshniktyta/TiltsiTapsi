@@ -46,7 +46,7 @@ class GameOverScene: BaseMenuScene {
         let buttons = [container, backButton]
         buildUI(items: buttons, wait: 0.5)
         
-        ActionManager.shared.performAction(.win)
+        ActionManager.shared.performAction(.jump)
     }
     
     private func generateResultDescription(for gameType: GameType, with stats: StatsData) -> String {

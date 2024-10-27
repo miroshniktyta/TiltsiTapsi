@@ -12,10 +12,10 @@ import SpriteKit
 
 class JumpScene: SKScene {
     
-    var totalBalls: Int = 50
-    var aimBalls: Int = 2 // todo
+    var totalBalls: Int = 60
+    var aimBalls: Int = 16
     var isCustom = false
-    var aimBallColor = UIColor.red
+    var aimBallColor = UIColor.green
     var colorsNumber = 4
     var collectedBalls = 0
     var mistakes = 0
@@ -30,6 +30,7 @@ class JumpScene: SKScene {
     // Labels
     var collectedLabel = AppLabelNode(text: "0")
     var tapToStartLabel = AppLabelNode(text: "Tap to Start")
+    var infoLabel: AppLabelNode!
     
     var aimedBallsLeft: Int {
         return balls.filter { $0.color == aimBallColor }.count
@@ -72,9 +73,15 @@ class JumpScene: SKScene {
     }
     
     func setupTapToStartLabel() {
-        tapToStartLabel.fontSize = 32
+        infoLabel = AppLabelNode(text: "Tap all GREEN items as soon as possible.")
+        infoLabel.fontSize = 18
+        infoLabel.fontColor = .white
+        infoLabel.position = CGPoint(x: frame.midX, y: frame.midY + 30)
+        addChild(infoLabel)
+        
+        tapToStartLabel.fontSize = 18
         tapToStartLabel.verticalAlignmentMode = .top
-        tapToStartLabel.position = CGPoint(x: frame.midX, y: frame.midY - 8)
+        tapToStartLabel.position = CGPoint(x: frame.midX, y: frame.midY - 40)
         addChild(tapToStartLabel)
         tapToStartLabel.run(.repeatForever(.sequence([.scale(by: 1.2, duration: 0.8), .scale(to: 1, duration: 0.7)])))
     }
@@ -116,7 +123,7 @@ class JumpScene: SKScene {
         addChild(ball)
         balls.append(ball)
         
-        ActionManager.shared.performAction(.ball)
+        ActionManager.shared.performAction(.ballAppear)
     }
     
     func colorBalls() {
@@ -166,7 +173,7 @@ class JumpScene: SKScene {
             let impulse = calculateImpulse(for: ball)
             ball.physicsBody?.applyImpulse(impulse)
         }
-        SoundManager.shared.play(sound: .morse)
+        SoundManager.shared.play(sound: .systemTic)
     }
     
     func calculateImpulse(for ball: SKShapeNode) -> CGVector {
@@ -209,13 +216,14 @@ class JumpScene: SKScene {
         let nodesArray = nodes(at: location)
         
         if let backButtonNode = nodesArray.first(where: { $0.name == "backButton" }) {
-            ActionManager.shared.performAction(.backButtonTap)
+            ActionManager.shared.performAction(.buttonTap)
             transitionBackToMenu()
             return
         }
 
         if tapToStartLabel.parent != nil {
             tapToStartLabel.removeFromParent()
+            infoLabel.removeFromParent() // Remove info label as well
             startGame()
             return
         }
@@ -231,12 +239,12 @@ class JumpScene: SKScene {
                 
                 let reactionTime = CACurrentMediaTime() - lastTap
                 recordedReactionTimes.append(reactionTime)
-                ActionManager.shared.performAction(.itemTap)
+                ActionManager.shared.performAction(.itemCollected)
             } else {
                 backgroundColor = .red
                 run(.wait(forDuration: 0.25)) { self.backgroundColor = .black }
                 mistakes += 1
-                ActionManager.shared.performAction(.lose)
+                ActionManager.shared.performAction(.error)
             }
             lastTap = CACurrentMediaTime()
             if balls.filter({ $0.color == aimBallColor }).isEmpty {
